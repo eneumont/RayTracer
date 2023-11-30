@@ -20,7 +20,6 @@ void Camera::LookAt(const glm::vec3& eye, const glm::vec3& target, const glm::ve
 
 Ray Camera::GetRay(const glm::vec2& point) const {
 	Ray ray;
-	// the ray origin is the camera eye
 	ray.origin = m_eye;
 	ray.direction = glm::normalize(m_lowerLeft + (m_horizontal * point.x) + (m_vertical * point.y) - m_eye);
 
@@ -28,18 +27,12 @@ Ray Camera::GetRay(const glm::vec2& point) const {
 }
 
 void Camera::CalculateViewPlane() {
-	// convert fov angle (degrees) to radians
 	float theta = glm::radians(m_fov);
-
-	// calculate the width / height of the view plane
 	float halfHeight = tan(theta * 0.5f);
 	float height = 2 * halfHeight;
 	float width = height * m_aspectRatio;
 
-	// calculate horizontal vector (right vector * width)
 	m_horizontal = m_right * width;
-		// calculate vertical vector (up vector * height)
 	m_vertical = m_up * height;
-		// calculate lower left location (origin)
 	m_lowerLeft = m_eye - (m_horizontal * 0.5f) - (m_vertical * 0.5f) - m_forward;
 }
