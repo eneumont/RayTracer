@@ -2,6 +2,7 @@
 #include "Color.h"
 #include "Ray.h"
 #include "Camera.h"
+#include <memory>
 
 class Scene {
 public:
@@ -14,10 +15,10 @@ public:
 	void Render(class Canvas& canvas);
 	color3_t Trace(const Ray& ray);
 
-	void SetCamera(<shared pointer of Camera> camera) { m_camera = camera; }
+	void SetCamera(std::shared_ptr<Camera> camera) { m_camera = camera; }
 
 private:
-	<shared pointer of Camera> m_camera;
+	std::shared_ptr<Camera> m_camera;
 
 	color3_t m_topColor{ 0 };
 	color3_t m_bottomColor{ 1 };

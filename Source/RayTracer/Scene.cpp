@@ -1,24 +1,20 @@
 #include "Scene.h"
+#include "Canvas.h"
+#include "MathUtils.h"
 
 void Scene::Render(Canvas& canvas) {
-	// cast ray for each point (pixel) on the canvas
-	for (int y = 0; y < canvas.GetSize().y; y++) {
-		for (int x = 0; x < canvas.GetSize().x; x++) {
-			// create vec2 pixel from canvas x,y
-			glm::vec2 pixel = <create vec2 from canvas x, y>
-				// get normalized (0 - 1) point coordinates from pixel
-			glm::vec2 point = < divide pixel by canvas size to normalize(0 - 1)
-				// flip y
+	for (int y = 0; y < canvas.getSize().y; y++) {
+		for (int x = 0; x < canvas.getSize().x; x++) {
+			glm::vec2 pixel(static_cast<float>(x), static_cast<float>(y));
+				
+			glm::vec2 point = pixel / canvas.getSize();
+			
 			point.y = 1.0f - point.y;
 
-			// create ray from camera
-			Ray ray = <get ray from camera using point>
+			Ray ray = m_camera->GetRay(point);
 
-				// cast ray into scene
-				// set color value from trace
 			color3_t color = Trace(ray);
 
-			// draw color to canvas point (pixel)
 			canvas.DrawPoint(pixel, color4_t(color, 1));
 		}
 	}
@@ -27,8 +23,7 @@ void Scene::Render(Canvas& canvas) {
 color3_t Scene::Trace(const Ray& ray) {
 	glm::vec3 direction = glm::normalize(ray.direction);
 
-	// set scene sky color
-	float t = (direction.y + 1) * 0.5f; // direction.y (-1 <-> 1) => (0 <-> 1)
+	float t = (direction.y + 1) * 0.5f;
 	color3_t color = lerp(m_bottomColor, m_topColor, t);
 
 	return color;

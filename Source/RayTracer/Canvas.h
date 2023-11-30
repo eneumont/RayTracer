@@ -9,7 +9,7 @@ public:
 
 	void Update();
 	void Clear(const color4_t& color);
-	void DrawPoint(const glm::ivec1& point, const color4_t& color);
+	void DrawPoint(const glm::ivec2& point, const color4_t& color);
 	glm::vec2 getSize() const { return m_size; }
 
 	friend class Renderer;

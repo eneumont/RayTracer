@@ -1,21 +1,19 @@
 #include "Camera.h"
 #include "MathUtils.h"
 
-Camera::Camera(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up, float fov, float aspectRatio) {
+Camera::Camera(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up, float fov, float aspectRatio) :
 	m_fov{ fov },
 	m_aspectRatio{ aspectRatio }
+{
+	LookAt(eye, target, up);
 }
 
 void Camera::LookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
 	m_eye = eye;
-	// set the camera axis vectors (forward, right, up)
-	// forward vector (eye <- target)
-	m_forward = <make sure to normalize vector>
-		// use cross product to create vectors
-		// right = up x forward 
-	m_right = <make sure to normalize vector>
-		// up = forward x right
-	m_up = < both vectors are normalized, no need to normalize : ) >
+
+	m_forward = glm::normalize(target - eye);
+	m_right = glm::normalize(cross(up, m_forward));
+	m_up = cross(m_forward, m_right);
 
 	CalculateViewPlane();
 }
@@ -23,11 +21,10 @@ void Camera::LookAt(const glm::vec3& eye, const glm::vec3& target, const glm::ve
 Ray Camera::GetRay(const glm::vec2& point) const {
 	Ray ray;
 	// the ray origin is the camera eye
-	<set ray origin>
-		// calculate direction from point
-		ray.direction = <lower left + (horizontal * point x) + (vertical * point.y) - eye>
+	ray.origin = m_eye;
+	ray.direction = glm::normalize(m_lowerLeft + (m_horizontal * point.x) + (m_vertical * point.y) - m_eye);
 
-		return ray;
+	return ray;
 }
 
 void Camera::CalculateViewPlane() {
@@ -37,12 +34,12 @@ void Camera::CalculateViewPlane() {
 	// calculate the width / height of the view plane
 	float halfHeight = tan(theta * 0.5f);
 	float height = 2 * halfHeight;
-	float width = height * aspectRatio;
+	float width = height * m_aspectRatio;
 
 	// calculate horizontal vector (right vector * width)
-	m_horizontal = <right * width>
+	m_horizontal = m_right * width;
 		// calculate vertical vector (up vector * height)
-	m_vertical = <up * height>
+	m_vertical = m_up * height;
 		// calculate lower left location (origin)
-	m_lowerLeft = m_eye - (<half horizontal>) - (<half vertical>) - m_forward;
+	m_lowerLeft = m_eye - (m_horizontal * 0.5f) - (m_vertical * 0.5f) - m_forward;
 }

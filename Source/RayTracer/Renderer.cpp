@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Canvas.h"
 
 bool Renderer::Initialize() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {

@@ -1,11 +1,15 @@
 #include <iostream>
 #include "Renderer.h"
 #include "Random.h"
+#include "Canvas.h"
+#include "Camera.h"
+#include "Scene.h"
+#include <SDL.h>
 
 using namespace std;
 
 int main(int, char**) {
-	seedRandom();
+	seedRandom((uint32_t)time(nullptr));
 
 	Renderer r;
 	r.Initialize();
@@ -13,11 +17,11 @@ int main(int, char**) {
 
 	Canvas c(400, 400, r);
 
-	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
+	float aspectRatio = c.getSize().x / (float)c.getSize().y;
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
 
 	Scene s;
-	scene.SetCamera(camera);
+	s.SetCamera(camera);
 
 	bool quit = false;
 	while (!quit) {
@@ -35,6 +39,11 @@ int main(int, char**) {
 			}
 			break;
 		}
+
+		c.Clear({ 0, 0, 0, 1});
+		s.Render(c);
+		c.Update();
+		r.PresentCanvas(c);
 	}
 
 	r.Shutdown();

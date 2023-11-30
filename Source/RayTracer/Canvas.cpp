@@ -19,11 +19,11 @@ void Canvas::Update() {
 }
 
 void Canvas::Clear(const color4_t& color) {
-	rgba_t rgba = Color::ColorToRGBA(color);
+	rgba_t rgba = ColorToRGBA(color);
 	std::fill(m_buffer.begin(), m_buffer.end(), rgba);
 }
 
 void Canvas::DrawPoint(const glm::ivec2& point, const color4_t& color) {
-	if (point < 0 || >= size width or size height) return;
-	m_buffer[point.x + (point.y * m_size.x)] = Color::ColorToRGBA(color);
+	if (point.x < 0 || point.y < 0 || point.x >= m_size.x || point.y >= m_size.y) return;
+	m_buffer[point.x + (point.y * m_size.x)] = ColorToRGBA(color);
 }
