@@ -23,7 +23,7 @@ int main(int, char**) {
 	float aspectRatio = c.getSize().x / (float)c.getSize().y;
 	shared_ptr<Camera> camera = make_shared<Camera>(glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
 
-	Scene s;
+	Scene s(20);
 	s.SetCamera(camera);
 
 	auto material = make_shared<Lambertian>(color3_t{ 0, 0, 1 });
@@ -32,6 +32,11 @@ int main(int, char**) {
 		auto sphere = std::make_unique<Sphere>(glm::vec3{ random(-5, 5), random(-5, 5), random(-5, -20) }, random(0.5, 2), material);
 		s.AddObject(std::move(sphere));
 	}
+
+	// render scene 
+	c.Clear({ 0, 0, 0, 1 });
+	s.Render(c, 50);
+	c.Update();
 
 	bool quit = false;
 	while (!quit) {
@@ -50,11 +55,11 @@ int main(int, char**) {
 			break;
 		}
 
-		c.Clear({ 0, 0, 0, 1});
+		/*c.Clear({ 0, 0, 0, 1});
 		s.Render(c);
-		c.Update();
+		c.Update();*/
 
-		for (int i = 0; i < 1000; i++) c.DrawPoint({ random01() * c.getSize().x, random01() * c.getSize().y }, {random01(), random01(), random01(), 1});
+		//for (int i = 0; i < 1000; i++) c.DrawPoint({ random01() * c.getSize().x, random01() * c.getSize().y }, {random01(), random01(), random01(), 1});
 
 		r.PresentCanvas(c);
 	}
