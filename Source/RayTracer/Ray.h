@@ -1,6 +1,16 @@
 #pragma once
 #include "glm/glm.hpp"
 
+struct raycastHit_t {
+	float distance = 0;
+
+	glm::vec3 point{ 0 };
+
+	glm::vec3 normal{ 0 };
+
+	class Material* material{ nullptr };
+};
+
 class Ray {
 public:
 	Ray() = default;

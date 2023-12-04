@@ -11,7 +11,7 @@ Camera::Camera(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& u
 void Camera::LookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
 	m_eye = eye;
 
-	m_forward = glm::normalize(target - eye);
+	m_forward = glm::normalize(eye - target);
 	m_right = glm::normalize(cross(up, m_forward));
 	m_up = cross(m_forward, m_right);
 
