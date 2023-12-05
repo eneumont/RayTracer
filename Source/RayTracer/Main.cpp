@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Material.h"
 #include "Sphere.h"
+#include "Plane.h"
 #include <Memory>
 #include <SDL.h>
 
@@ -21,7 +22,7 @@ int main(int, char**) {
 	Canvas c(400, 300, r);
 
 	float aspectRatio = c.getSize().x / (float)c.getSize().y;
-	shared_ptr<Camera> camera = make_shared<Camera>(glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
+	shared_ptr<Camera> camera = make_shared<Camera>(glm::vec3{ 0, 1, 8 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
 
 	Scene s(20);
 	s.SetCamera(camera);
@@ -29,10 +30,15 @@ int main(int, char**) {
 	// create material
 	auto lambertian = std::make_shared<Lambertian>(color3_t{ 0, 0, 1 });
 	auto metal = std::make_shared<Metal>(color3_t{ 1, 1, 1 }, 0.0f);
+	std::shared_ptr<Material> material;
+
+	material = std::make_shared<Lambertian>(color3_t{ 0.2f });
+	auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, material);
+	s.AddObject(std::move(plane));
 
 	// create objects -> add to scene
 	for (int i = 0; i < 10; i++) {
-		std::shared_ptr<Material> material = (rand() % 2) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
+		material = (rand() % 2) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
 		auto sphere = std::make_unique<Sphere>(glm::vec3{ random(-5, 5), random(-5, 5), random(-5, -20) }, random(0.5, 2), material);
 		s.AddObject(std::move(sphere));
 	}
