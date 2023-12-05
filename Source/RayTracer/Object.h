@@ -12,7 +12,7 @@ public:
 
 	virtual bool Hit(const Ray& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit) = 0 ;
 
-	Material* GetMaterial() { return m_material.get(); } //might be broken
+	Material* GetMaterial() { return m_material.get(); }
 
 protected:
 	std::shared_ptr<Material> m_material;
