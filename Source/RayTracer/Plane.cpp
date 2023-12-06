@@ -20,7 +20,6 @@ bool Plane::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHit
         return false;
     }
 
-
     // set raycast hit
     raycastHit.distance = t;
     raycastHit.point = ray.GetPoint(t);

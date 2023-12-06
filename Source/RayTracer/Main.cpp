@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Triangle.h"
 #include <Memory>
 #include <SDL.h>
 
@@ -22,9 +23,9 @@ int main(int, char**) {
 	Canvas c(400, 300, r);
 
 	float aspectRatio = c.getSize().x / (float)c.getSize().y;
-	shared_ptr<Camera> camera = make_shared<Camera>(glm::vec3{ 0, 1, 8 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 1, 10 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 20.0f, aspectRatio);
 
-	Scene s(20);
+	Scene s(8, glm::vec3{ 1.0f }, glm::vec3{ 0.5f, 0.7f, 1.0f });
 	s.SetCamera(camera);
 
 	// create material
@@ -37,10 +38,33 @@ int main(int, char**) {
 	s.AddObject(std::move(plane));
 
 	// create objects -> add to scene
-	for (int i = 0; i < 10; i++) {
+	/*for (int i = 0; i < 10; i++) {
 		material = (rand() % 2) ? std::dynamic_pointer_cast<Material>(lambertian) : std::dynamic_pointer_cast<Material>(metal);
 		auto sphere = std::make_unique<Sphere>(glm::vec3{ random(-5, 5), random(-5, 5), random(-5, -20) }, random(0.5, 2), material);
 		s.AddObject(std::move(sphere));
+	}*/
+
+	/*auto triangle = std::make_unique<Triangle>(glm::vec3{ 5, 0, 0 }, glm::vec3{ 0, 5, 0 }, glm::vec3{ 0, 0, 5 }, material);
+	s.AddObject(std::move(triangle));*/
+
+	for (int x = -10; x < 10; x++) {
+		for (int z = -10; z < 10; z++) {
+			std::shared_ptr<Material> material;
+
+			// create random material
+			float r = random01();
+			if (r < 0.3f)		material = std::make_shared<Lambertian>(glm::rgbColor(glm::vec3{ random(0, 360), 1.0f, 1.0f }));
+			else if (r < 0.6f)	material = std::make_shared<Metal>(color3_t{ random(0.5f, 1.0f) }, random(0, 0.5f));
+			else if (r < 0.9f)	material = std::make_shared<Dielectric>(color3_t{ 1.0f }, random(1.1f, 2));
+			else				material = std::make_shared<Emissive>(glm::rgbColor(glm::vec3{ random(0, 360), 1.0f, 1.0f }), 5.0f);
+
+			// set random sphere radius
+			float radius = random(0.2f, 0.3f);
+			// create sphere using random radius and material
+			auto sphere = std::make_unique<Sphere>(glm::vec3{ x + random(-0.5f, 0.5f), radius, z + random(-0.5f, 0.5f) }, radius, material);
+			// add sphere to the scene
+			s.AddObject(std::move(sphere));
+		}
 	}
 
 	// render scene 

@@ -38,49 +38,6 @@ void Scene::Render(Canvas& canvas, int numSamples) {
 	}
 }
 
-color3_t Scene::Trace(const Ray& ray) {
-	glm::vec3 direction = glm::normalize(ray.direction);
-
-	float t = (direction.y + 1) * 0.5f;
-	color3_t color = lerp(m_bottomColor, m_topColor, t);
-
-	return color;
-}
-
-color3_t Scene::Trace(const Ray& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit) {
-	bool rayHit = false;
-	float closestDistance = maxDistance;
-
-	// check if scene objects are hit by the ray
-	for (const auto & object : m_objects) {
-		// when checking objects don't include objects farther than closest hit (starts at max distance)
-		if (object->Hit(ray, minDistance, closestDistance, raycastHit)) {
-			rayHit = true;
-			// set closest distance to the raycast hit distance (only hit objects closer than closest distance)
-			closestDistance = raycastHit.distance;
-		}
-	}
-
-	// if ray hit object, scatter (bounce) ray and check for next hit
-	if (rayHit) {
-		Ray scattered;
-		color3_t color;
-
-		if (raycastHit.material->Scatter(ray, raycastHit, color, scattered)) {
-			return raycastHit.normal;
-		} else {
-			return color3_t{ 0, 0, 0 };
-		}
-	}
-
-	// if ray not hit, return scene sky color
-	glm::vec3 direction = glm::normalize(ray.direction);
-	float t = (direction.y + 1) * 0.5f; // direction.y (-1 <-> 1) => (0 <-> 1)
-	color3_t color = lerp(m_bottomColor, m_topColor, t);
-
-	return color;
-}
-
 color3_t Scene::Trace(const Ray& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit, int depth) {
 	bool rayHit = false;
 	float closestDistance = maxDistance;
@@ -106,7 +63,7 @@ color3_t Scene::Trace(const Ray& ray, float minDistance, float maxDistance, rayc
 			return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
 		} else {
 			// reached maximum depth of bounces (color is black)
-			return color3_t{ 0, 0, 0 };
+			return raycastHit.material->GetEmissive();
 		}
 	}
 

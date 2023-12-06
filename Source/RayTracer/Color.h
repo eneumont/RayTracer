@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtx/color_space.hpp>
 
 typedef glm::vec3 color3_t;
 typedef glm::vec4 color4_t;
