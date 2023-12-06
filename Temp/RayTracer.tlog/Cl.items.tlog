@@ -2,6 +2,7 @@ C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Camera.cpp;C:\a\Q5\Computer
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Canvas.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Canvas.obj
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Main.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Main.obj
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Material.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Material.obj
+C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Mesh.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Mesh.obj
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Plane.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Plane.obj
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Renderer.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Renderer.obj
 C:\a\Q5\Computer Graphics\RayTracer\Source\RayTracer\Scene.cpp;C:\a\Q5\Computer Graphics\RayTracer\Temp\Scene.obj
