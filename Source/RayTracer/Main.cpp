@@ -86,6 +86,12 @@ void FinalScene(Scene& scene, const Canvas& canvas) {
 		}
 	}
 
+	std::shared_ptr<Material> material = std::make_shared<Lambertian>(glm::rgbColor(glm::vec3{ 1.0, 0, 1.0 }));
+	auto sphere = std::make_unique<Sphere>(glm::vec3{ -0.25f, 1, -0.25f }, 1, material);
+	material = std::make_shared<Metal>(color3_t{ random(0.5, 1.0f) }, random(0, 0.5f));
+	sphere = std::make_unique<Sphere>(glm::vec3{ -0.5f, 1, -0.5f }, 1, material);
+	scene.AddObject(std::move(sphere));
+
 	auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Lambertian>(color3_t{ 0.2f }));
 	scene.AddObject(std::move(plane));
 }
@@ -100,7 +106,7 @@ int main(int, char**) {
 
 	Renderer r;
 	r.Initialize();
-	r.CreateWindow("RayTracer", 400, 300);
+	r.CreateWindow("RayTracer", width, height);
 
 	Canvas c(width, height, r);
 	Scene s(glm::vec3{ 1.0f }, glm::vec3{ 0.5f, 0.7f, 1.0f });
