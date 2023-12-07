@@ -36,7 +36,7 @@ bool Triangle::Hit(const Ray& ray, float minDistance, float maxDistance, raycast
         // set raycast hit
         raycastHit.distance = t;
         raycastHit.point = ray.GetPoint(t);
-        raycastHit.normal = normal;
+        raycastHit.normal = glm::normalize(normal);
         raycastHit.material = GetMaterial();
 
         return true;

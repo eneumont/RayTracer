@@ -18,7 +18,6 @@ bool Sphere::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHi
             raycastHit.distance = t;
             raycastHit.point = ray.GetPoint(t);
             raycastHit.normal = (raycastHit.point - m_center) / m_radius;
-
             raycastHit.material = GetMaterial();
 
             return true;
@@ -28,7 +27,6 @@ bool Sphere::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHi
             raycastHit.distance = t;
             raycastHit.point = ray.GetPoint(t);
             raycastHit.normal = (raycastHit.point - m_center) / m_radius;
-
             raycastHit.material = GetMaterial();
 
             return true;

@@ -87,20 +87,52 @@ void FinalScene(Scene& scene, const Canvas& canvas) {
 	}
 
 	std::shared_ptr<Material> material = std::make_shared<Lambertian>(glm::rgbColor(glm::vec3{ 1.0, 0, 1.0 }));
-	auto sphere = std::make_unique<Sphere>(glm::vec3{ -0.25f, 1, -0.25f }, 1, material);
+	auto sphere = std::make_unique<Sphere>(glm::vec3{ -0.25f, 1, -0.25f }, 1.0f, material);
 	material = std::make_shared<Metal>(color3_t{ random(0.5, 1.0f) }, random(0, 0.5f));
-	sphere = std::make_unique<Sphere>(glm::vec3{ -0.5f, 1, -0.5f }, 1, material);
+	sphere = std::make_unique<Sphere>(glm::vec3{ -0.5f, 1, -0.5f }, 1.0f, material);
 	scene.AddObject(std::move(sphere));
 
 	auto plane = std::make_unique<Plane>(glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Lambertian>(color3_t{ 0.2f }));
 	scene.AddObject(std::move(plane));
 }
 
+void CornellScene(Scene& scene, const Canvas& canvas) {
+	float aspectRatio = canvas.getSize().x / canvas.getSize().y;
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 3 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 100.0f, aspectRatio);
+	scene.SetCamera(camera);
+
+	auto left = std::make_unique<Plane>(glm::vec3{ -2, 0, 0 }, glm::vec3{ 1, 0, 0 }, std::make_shared<Lambertian>(color3_t{ 1,0,0 }));
+	scene.AddObject(std::move(left));
+
+	auto right = std::make_unique<Plane>(glm::vec3{ 2, 0, 0 }, glm::vec3{ -1, 0, 0 }, std::make_shared<Lambertian>(color3_t{ 0,1,0 }));
+	scene.AddObject(std::move(right));
+
+	auto back = std::make_unique<Plane>(glm::vec3{ 0, 0, -2 }, glm::vec3{ 0, 0, 1 }, std::make_shared<Lambertian>(color3_t{ 1 }));
+	scene.AddObject(std::move(back));
+
+	auto floor = std::make_unique<Plane>(glm::vec3{ 0, -2, 0 }, glm::vec3{ 0, 1, 0 }, std::make_shared<Lambertian>(color3_t{ 1 }));
+	scene.AddObject(std::move(floor));
+
+	auto celing = std::make_unique<Plane>(glm::vec3{ 0, 2, 0 }, glm::vec3{ 0, -1, 0 }, std::make_shared<Lambertian>(color3_t{ 1 }));
+	scene.AddObject(std::move(celing));
+
+	auto light = std::make_unique<Mesh>(std::make_shared<Emissive>(color3_t{ 1, 1, 1 }, 5));
+	light->Load("Models/cube.obj", glm::vec3{ 0, 2, 0 }, glm::vec3{ 0, 0, 0 });
+	scene.AddObject(std::move(light));
+
+	auto sphere = std::make_unique<Sphere>(glm::vec3{ 0.6, -1, 0.3 }, 1.0f, std::make_shared<Lambertian>(color3_t{ 1 }));
+	scene.AddObject(std::move(sphere));
+
+	auto cube = std::make_unique<Mesh>(std::make_shared<Lambertian>(color3_t{ 1 }));
+	cube->Load("Models/cube.obj", glm::vec3{ -0.6, -1, -0.6 }, glm::vec3{ 0.1 });
+	scene.AddObject(std::move(cube));
+}
+
 int main(int, char**) {
 	const int width = 400;
 	const int height = 300;
-	const int samples = 20;
-	const int depth = 5;
+	const int samples = 200;
+	const int depth = 6;
 
 	seedRandom((uint32_t)time(nullptr));
 
@@ -109,9 +141,9 @@ int main(int, char**) {
 	r.CreateWindow("RayTracer", width, height);
 
 	Canvas c(width, height, r);
-	Scene s(glm::vec3{ 1.0f }, glm::vec3{ 0.5f, 0.7f, 1.0f });
+	Scene s(glm::vec3{ 1.0f }, glm::vec3{ 0 });
 
-	FinalScene(s, c);
+	CornellScene(s, c);
 
 	// render scene 
 	c.Clear({ 0, 0, 0, 1 });

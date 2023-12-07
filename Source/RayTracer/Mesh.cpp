@@ -10,7 +10,7 @@
 
 bool Mesh::Hit(const Ray& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit) {
 	// check cast ray with mesh triangles 
-	for (int i = 0; i < m_vertices.size(); i + 3) {
+	for (int i = 0; i < m_vertices.size(); i += 3) {
 		Triangle triangle(m_vertices[i], m_vertices[i + 1], m_vertices[i + 2], m_material);
 		if (triangle.Hit(ray, minDistance, maxDistance, raycastHit)) return true;
 	}
